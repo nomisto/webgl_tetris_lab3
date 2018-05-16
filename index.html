@@ -1,0 +1,68 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		
+		<script type="text/javascript" src="util/gl-matrix.js"></script>
+		<script type="text/javascript" src="util/webgl-utils.js"></script>
+		
+		<script type="text/javascript" src="src/objects/grid.js"></script>
+		<script type="text/javascript" src="src/objects/block.js"></script>
+		<script type="text/javascript" src="src/objects/texture.js"></script>
+		<script type="text/javascript" src="src/objects/tetracube.js"></script>
+		<script type="text/javascript" src="src/objects/shapes.js"></script>
+		
+		<script type="text/javascript" src="src/projection.js"></script>
+		<script type="text/javascript" src="src/view.js"></script>
+		<script type="text/javascript" src="src/inputhandler.js"></script>
+		<script type="text/javascript" src="src/objectmanager.js"></script>
+		
+		<!--<script type="text/javascript" src="src/objects/shapes.js"></script>
+		<script type="text/javascript" src="src/objects/background.js"></script>
+		
+		<script type="text/javascript" src="src/objects/texture.js"></script>
+		<script type="text/javascript" src="src/objects/tetromino.js"></script>
+		
+		<script type="text/javascript" src="src/objectmanager.js"></script>
+		<script type="text/javascript" src="src/gamemanager.js"></script>
+		<script type="text/javascript" src="src/animationhandler.js"></script>
+		-->
+		
+		<script id="fragmentshader" type="x-shader/x-fragment">
+			precision mediump float;
+			varying vec2 vTexCoords;
+			
+			uniform sampler2D uTexture;
+			
+			void main(void) {
+				gl_FragColor = texture2D(uTexture, vTexCoords);
+			}
+		</script>
+
+		<script id="vertexshader" type="x-shader/x-vertex">
+			attribute vec3 aVertexPosition;
+			attribute vec2 aTexCoords;
+
+			uniform mat4 uVMatrix;
+			uniform mat4 uMMatrix;
+			uniform mat4 uPMatrix;
+			
+			varying vec2 vTexCoords;
+
+			void main(void) {
+				gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
+				vTexCoords = aTexCoords;
+			}
+		</script>
+		
+		<script type="text/javascript" src="src/main.js"></script>
+	</head>
+	
+	<body onload="webGLStart();">
+		<div>
+		<canvas id="lab01-canvas" width="350" height="700"></canvas>
+		<p id="score"></p>
+		<br>
+		</div>
+		
+	</body>
+</html>
