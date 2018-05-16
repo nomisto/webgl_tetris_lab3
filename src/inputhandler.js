@@ -9,42 +9,53 @@ InputHandler = function(){
 			//"->" or "d": move the object drawn one unit in the positive x direction 
 			if ((e.keyCode==68 || e.keyCode==39) && strokeBlock == false) {
 				strokeBlock=true;
+				AnimationHandler.addAnimation(1);
+				console.log("left");
 			}
 			//"<-" or "a": move the object drawn one unit in the negative x direction 
 			if ((e.keyCode==65 || e.keyCode==37) && strokeBlock == false) {
 				strokeBlock=true;
+				AnimationHandler.addAnimation(2);
 			}
 			//"/\" or "w": move the object drawn one unit in the positive z direction 
 			if ((e.keyCode==87 || e.keyCode==38) && strokeBlock == false) {
 				strokeBlock=true;
+				AnimationHandler.addAnimation(3);
 			}
 			//"\/" or "s": move the object drawn one unit in the negative z direction 
 			if ((e.keyCode==83) && strokeBlock == false) {
 				strokeBlock=true;
+				AnimationHandler.addAnimation(4);
 			}
 			//"x": rotate the object drawn 90 degrees counterclockwise around the x axis 
 			if (e.keyCode==88 && !e.shiftKey && strokeBlock == false) {
 				strokeBlock=true;
+				AnimationHandler.addAnimation(5);
 			}
 			//"X": rotate the object drawn 90 degrees clockwise around the x axis 
 			if (e.keyCode==88 && e.shiftKey && strokeBlock == false) {
 				strokeBlock=true;
+				AnimationHandler.addAnimation(6);
 			}
 			//"y": rotate the object drawn 90 degrees counterclockwise around the y axis 
 			if (e.keyCode==89 && !e.shiftKey && strokeBlock == false) {
 				strokeBlock=true;
+				AnimationHandler.addAnimation(7);
 			}
 			//"Y": rotate the object drawn 90 degrees clockwise around the y axis 
 			if (e.keyCode==89 && e.shiftKey && strokeBlock == false) {
 				strokeBlock=true;
+				AnimationHandler.addAnimation(8);
 			}
 			//"z": rotate the object drawn 90 degrees counterclockwise around the z axis 
 			if (e.keyCode==90 && !e.shiftKey && strokeBlock == false) {
 				strokeBlock=true;
+				AnimationHandler.addAnimation(9);
 			}
 			//"Z": rotate the object drawn 90 degrees clockwise around the z axis 
 			if (e.keyCode==90 && e.shiftKey && strokeBlock == false) {
 				strokeBlock=true;
+				AnimationHandler.addAnimation(10);
 			}
 			//"p": (un)pause the game (i.e. stop/restart gravity) 
 			if (e.keyCode==80 && strokeBlock == false) {

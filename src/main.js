@@ -139,7 +139,7 @@ function zTest(i){
 // the render loop, which loops the whole runtime
 function renderLoop() {
     InputHandler.handleInput();
-	//AnimationHandler.animate();
+	AnimationHandler.animate();
 	drawScene();
     requestAnimFrame(renderLoop);
 }
@@ -164,7 +164,7 @@ function webGLStart() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 	
-	ObjectManager.addTetracube(1);
+	ObjectManager.addTetracube(6);
 	Texture.load();
 	Grid.setup();
 	Block.setup();
