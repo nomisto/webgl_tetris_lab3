@@ -34,6 +34,7 @@ ObjectManager = function(){
 	function initTetracube(x){
 		
 		var mvMatrices = [];
+		var rotationMatrices = [];
 		
 		var blocks = x.getBlocks();
 		
@@ -47,6 +48,7 @@ ObjectManager = function(){
 			mat4.translate(mvMatrix, mvMatrix, [0,9,-15]);
 			mat4.translate(mvMatrix, mvMatrix, [blocks[i*3]*2, blocks[i*3+1]*2, blocks[i*3+2]*2]);
 			mvMatrices.push(mvMatrix);
+			
 		}
 		var x = new Tetracube(index, createTexcoordsBuffer(texcoords), mvMatrices, blocks, x.getVectorToRotationOrigin(), 0, 3,0,3);
 		tetracubes.push(x);

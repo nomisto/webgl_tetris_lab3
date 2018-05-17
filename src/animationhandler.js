@@ -2,6 +2,10 @@ AnimationHandler = function(){
 	var animationsStack = [];
 	var animationsProgress = [];
 	
+	var xAxis = vec3.fromValues(1,0,0);
+	var yAxis = vec3.fromValues(0,1,0);
+	var zAxis = vec3.fromValues(0,0,1);
+	
 	var gravitationSpeed = 850;
 	
 	var current;
@@ -24,10 +28,28 @@ AnimationHandler = function(){
 		var last = animationsStack.shift();
 		animationsProgress.shift();
 		if(last==5){
-			current.orientation--;
+			vec3.cross(yAxis,xAxis,yAxis);
+			vec3.cross(zAxis,xAxis,zAxis);
 		}
 		else if(last==6){
-			current.orientation++;
+			vec3.cross(yAxis,yAxis,xAxis);
+			vec3.cross(zAxis,zAxis,xAxis);
+		}
+		else if(last==7){
+			vec3.cross(xAxis,yAxis,xAxis);
+			vec3.cross(zAxis,yAxis,zAxis);
+		}
+		else if(last==8){
+			vec3.cross(xAxis,xAxis,yAxis);
+			vec3.cross(zAxis,zAxis,yAxis);
+		}
+		else if(last==9){
+			vec3.cross(xAxis,zAxis,xAxis);
+			vec3.cross(yAxis,zAxis,yAxis);
+		}
+		else if(last==10){
+			vec3.cross(xAxis,xAxis,zAxis);
+			vec3.cross(yAxis,yAxis,zAxis);
 		}
 		if(animationsStack.length==0){
 			//GameManager.gravitate();
@@ -164,11 +186,12 @@ AnimationHandler = function(){
 		return angle * Math.PI / 180;
 	}
 	
+	
 	// calculates the rotation-matrix of the mvMatrix by the given angle around the z-axis
 	function rotateX(angle) {
 		for(i=0; i<current.blocklength; i++){
 			mat4.translate(current.mvMatrixArray[i], current.mvMatrixArray[i], [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
-			mat4.rotateX(current.mvMatrixArray[i], current.mvMatrixArray[i], gradToRad(angle));
+			mat4.rotate(current.mvMatrixArray[i], current.mvMatrixArray[i], gradToRad(angle),xAxis);
 			mat4.translate(current.mvMatrixArray[i], current.mvMatrixArray[i], [-current.vectorToRotationOriginArray[3*i]*2, -current.vectorToRotationOriginArray[3*i+1]*2, -current.vectorToRotationOriginArray[3*i+2]*2]);
 		}
 	}
@@ -176,7 +199,7 @@ AnimationHandler = function(){
 	function rotateY(angle) {
 		for(i=0; i<current.blocklength; i++){
 			mat4.translate(current.mvMatrixArray[i], current.mvMatrixArray[i], [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
-			mat4.rotateY(current.mvMatrixArray[i], current.mvMatrixArray[i], gradToRad(angle));
+			mat4.rotate(current.mvMatrixArray[i], current.mvMatrixArray[i], gradToRad(angle),yAxis);
 			mat4.translate(current.mvMatrixArray[i], current.mvMatrixArray[i], [-current.vectorToRotationOriginArray[3*i]*2, -current.vectorToRotationOriginArray[3*i+1]*2, -current.vectorToRotationOriginArray[3*i+2]*2]);
 		}
 	}
@@ -184,10 +207,11 @@ AnimationHandler = function(){
 	function rotateZ(angle) {
 		for(i=0; i<current.blocklength; i++){
 			mat4.translate(current.mvMatrixArray[i], current.mvMatrixArray[i], [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
-			mat4.rotateZ(current.mvMatrixArray[i], current.mvMatrixArray[i], gradToRad(angle));
+			mat4.rotate(current.mvMatrixArray[i], current.mvMatrixArray[i], gradToRad(angle),zAxis);
 			mat4.translate(current.mvMatrixArray[i], current.mvMatrixArray[i], [-current.vectorToRotationOriginArray[3*i]*2, -current.vectorToRotationOriginArray[3*i+1]*2, -current.vectorToRotationOriginArray[3*i+2]*2]);
 		}
 	}
+	
 	
 	
 	
