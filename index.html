@@ -5,6 +5,9 @@
 		<script type="text/javascript" src="util/gl-matrix.js"></script>
 		<script type="text/javascript" src="util/webgl-utils.js"></script>
 		
+		
+		<script type="text/javascript" src="src/main.js"></script>
+		
 		<script type="text/javascript" src="src/objects/grid.js"></script>
 		<script type="text/javascript" src="src/objects/block.js"></script>
 		<script type="text/javascript" src="src/objects/texture.js"></script>
@@ -15,7 +18,7 @@
 		<script type="text/javascript" src="src/view.js"></script>
 		<script type="text/javascript" src="src/inputhandler.js"></script>
 		<script type="text/javascript" src="src/objectmanager.js"></script>
-		<!--<script type="text/javascript" src="src/gamemanager.js"></script>-->
+		<script type="text/javascript" src="src/gamemanager.js"></script>
 		<script type="text/javascript" src="src/animationhandler.js"></script>
 		
 		
@@ -46,15 +49,56 @@
 			}
 		</script>
 		
-		<script type="text/javascript" src="src/main.js"></script>
 	</head>
 	
 	<body onload="webGLStart();">
 		<div>
-		<canvas id="lab01-canvas" width="350" height="700"></canvas>
-		<p id="score"></p>
-		<br>
+			<canvas id="lab01-canvas" width="350" height="700"></canvas>
 		</div>
+		<div id="slidecontainer">
+			<p>
+				Ambient
+				<input type="range" min="0.0" max="1.0" step="0.1" value="0.5" id="ambient">
+				<span id = "ambval"></span>
+			</p>
+			<p>
+				Diffuse
+				<input type="range" min="0.0" max="1.0" step="0.1" value="0.5" id="diffuse">
+				<span id = "diffval"></span>
+			</p>
+			<p>
+				Specular
+				<input type="range" min="0.0" max="1.0" step="0.1" value="0.5" id="specular">
+				<span id = "specval"></span>
+			</p>
+		</div>
+		
+		<script>
+			var slideramb = document.getElementById("ambient");
+			var outamb = document.getElementById("ambval");
+			outamb.innerHTML = slideramb.value;
+			
+			slideramb.oninput = function() {
+				outamb.innerHTML = this.value;
+			} 
+			
+			var sliderdiff = document.getElementById("diffuse");
+			var outdiff = document.getElementById("diffval");
+			outdiff.innerHTML = sliderdiff.value;
+			
+			sliderdiff.oninput = function() {
+				outdiff.innerHTML = this.value;
+			} 
+			
+			var sliderspec = document.getElementById("specular");
+			var outspec = document.getElementById("specval");
+			outspec.innerHTML = sliderspec.value;
+			
+			sliderspec.oninput = function() {
+				outspec.innerHTML = this.value;
+			} 
+		</script>
+
 		
 	</body>
 </html>

@@ -77,6 +77,15 @@ function setVMatrixUniform(vMatrix) {
 }
 
 
+var fullGrid = false;
+function toggleGrid(){
+	if(!fullGrid){
+		fullGrid=true;
+	} else {
+		fullGrid=false;
+	}
+}
+
 //Draws the Arrays and hands over the belonging mvMatrix of all tetrominos/objects stored in the ObjectManager
 //Also creates the perspective Matrix and sets it to the uniform.
 function drawScene() {
@@ -86,22 +95,32 @@ function drawScene() {
     setPMatrixUniform(Projection.getMatrix());
 	setVMatrixUniform(View.getMatrix());
 	gl.bindTexture(gl.TEXTURE_2D, Texture.getWhiteTexture());
-	if(zTest(0)>zTest(1)){
+	
+	if(fullGrid == true){
 		drawGrid(1,24,'horiz');
-	} else {
 		drawGrid(0,24,'horiz');
-	}
-	
-	if(zTest(2)>zTest(3)){
 		drawGrid(3,34,'vert');
-	} else {
 		drawGrid(2,34,'vert');
-	}
-	
-	if(zTest(4)>zTest(5)){
 		drawGrid(5,34,'vert');
-	} else {
 		drawGrid(4,34,'vert');
+	} else {
+		if(zTest(0)>zTest(1)){
+			drawGrid(1,24,'horiz');
+		} else {
+			drawGrid(0,24,'horiz');
+		}
+		
+		if(zTest(2)>zTest(3)){
+			drawGrid(3,34,'vert');
+		} else {
+			drawGrid(2,34,'vert');
+		}
+		
+		if(zTest(4)>zTest(5)){
+			drawGrid(5,34,'vert');
+		} else {
+			drawGrid(4,34,'vert');
+		}
 	}
 	
 	gl.bindTexture(gl.TEXTURE_2D, Texture.getTexture());
@@ -164,9 +183,9 @@ function webGLStart() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 	
-	ObjectManager.addTetracube(6);
 	Texture.load();
 	Grid.setup();
 	Block.setup();
+	GameManager.initializeNewGame();
     renderLoop();
 }

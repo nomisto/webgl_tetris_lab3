@@ -25,34 +25,35 @@ AnimationHandler = function(){
 	   If the animation stack size is zero, it gravitates one time.
 	   */
 	function shift() {
-		var last = animationsStack.shift();
-		animationsProgress.shift();
-		if(last==5){
+		
+		var lastStack = animationsStack.shift();
+		var lastProgress = animationsProgress.shift();
+		if(lastStack==6 && lastProgress != 0){
 			vec3.cross(yAxis,xAxis,yAxis);
 			vec3.cross(zAxis,xAxis,zAxis);
 		}
-		else if(last==6){
+		else if(lastStack==5 && lastProgress != 0){
 			vec3.cross(yAxis,yAxis,xAxis);
 			vec3.cross(zAxis,zAxis,xAxis);
 		}
-		else if(last==7){
+		else if(lastStack==8 && lastProgress != 0){
 			vec3.cross(xAxis,yAxis,xAxis);
 			vec3.cross(zAxis,yAxis,zAxis);
 		}
-		else if(last==8){
+		else if(lastStack==7 && lastProgress != 0){
 			vec3.cross(xAxis,xAxis,yAxis);
 			vec3.cross(zAxis,zAxis,yAxis);
 		}
-		else if(last==9){
+		else if(lastStack==10 && lastProgress != 0){
 			vec3.cross(xAxis,zAxis,xAxis);
 			vec3.cross(yAxis,zAxis,yAxis);
 		}
-		else if(last==10){
+		else if(lastStack==9 && lastProgress != 0){
 			vec3.cross(xAxis,xAxis,zAxis);
 			vec3.cross(yAxis,yAxis,zAxis);
 		}
 		if(animationsStack.length==0){
-			//GameManager.gravitate();
+			GameManager.gravitate();
 		}
 	}
 	
@@ -72,8 +73,7 @@ AnimationHandler = function(){
 	function addAnimation(input){
 		animationsStack.push(input);
 		animationsProgress.push(0);
-		//current = GameManager.getCurrent();
-		current = ObjectManager.getAllTetracubes()[0];
+		current = GameManager.getCurrent();
 	}
 	
 	
@@ -82,6 +82,14 @@ AnimationHandler = function(){
 	var deltaTime;
 	function animate() {
 		deltaTime = getDeltaTime();
+		
+		if(animationsProgress[0] == 0){
+			if(!GameManager.isNextFree(animationsStack[0])){
+				shift();
+				return;
+			}
+		}
+		
 		if (animationsStack[0] == 1){
 			moveX(getValue());
 		}
@@ -212,12 +220,60 @@ AnimationHandler = function(){
 		}
 	}
 	
+	function getFullRotation(i,rotation){
+		var foo = mat4.create;
+		mat4.copy(foo,current.mvMatrixArray[i]);
+		var angle;
+		switch(rotation){
+			case 5: 
+				mat4.translate(foo, foo, [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
+				mat4.rotate(foo, foo, Math.PI/2,xAxis);
+				mat4.translate(foo, foo, [-current.vectorToRotationOriginArray[3*i]*2, -current.vectorToRotationOriginArray[3*i+1]*2, -current.vectorToRotationOriginArray[3*i+2]*2]);
+				break;
+			case 6: 
+				mat4.translate(foo, foo, [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
+				mat4.rotate(foo, foo, -Math.PI/2,xAxis);
+				mat4.translate(foo, foo, [-current.vectorToRotationOriginArray[3*i]*2, -current.vectorToRotationOriginArray[3*i+1]*2, -current.vectorToRotationOriginArray[3*i+2]*2]);
+				break;
+			case 7: 
+				mat4.translate(foo, foo, [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
+				mat4.rotate(foo, foo, Math.PI/2,yAxis);
+				mat4.translate(foo, foo, [-current.vectorToRotationOriginArray[3*i]*2, -current.vectorToRotationOriginArray[3*i+1]*2, -current.vectorToRotationOriginArray[3*i+2]*2]);
+				break;
+			case 8: 
+				mat4.translate(foo, foo, [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
+				mat4.rotate(foo, foo, -Math.PI/2,yAxis);
+				mat4.translate(foo, foo, [-current.vectorToRotationOriginArray[3*i]*2, -current.vectorToRotationOriginArray[3*i+1]*2, -current.vectorToRotationOriginArray[3*i+2]*2]);
+				break;
+			case 9: 
+				mat4.translate(foo, foo, [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
+				mat4.rotate(foo, foo, Math.PI/2,zAxis);
+				mat4.translate(foo, foo, [-current.vectorToRotationOriginArray[3*i]*2, -current.vectorToRotationOriginArray[3*i+1]*2, -current.vectorToRotationOriginArray[3*i+2]*2]);
+				break;
+			case 10: 
+				mat4.translate(foo, foo, [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
+				mat4.rotate(foo, foo, -Math.PI/2,zAxis);
+				mat4.translate(foo, foo, [-current.vectorToRotationOriginArray[3*i]*2, -current.vectorToRotationOriginArray[3*i+1]*2, -current.vectorToRotationOriginArray[3*i+2]*2]);
+				break;
+		}
+		return foo;
+	}
+	
+	function resetAxis(){
+		xAxis = vec3.fromValues(1,0,0);
+		yAxis = vec3.fromValues(0,1,0);
+		zAxis = vec3.fromValues(0,0,1);
+	}
+			
+	
 	
 	
 	
 	return{
 		addAnimation: addAnimation,
 		animate: animate,
+		resetAxis: resetAxis,
+		getFullRotation: getFullRotation,
 		setGravitationSpeed: setGravitationSpeed
 	}
 }();

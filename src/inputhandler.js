@@ -10,7 +10,6 @@ InputHandler = function(){
 			if ((e.keyCode==68 || e.keyCode==39) && strokeBlock == false) {
 				strokeBlock=true;
 				AnimationHandler.addAnimation(1);
-				console.log("left");
 			}
 			//"<-" or "a": move the object drawn one unit in the negative x direction 
 			if ((e.keyCode==65 || e.keyCode==37) && strokeBlock == false) {
@@ -60,11 +59,19 @@ InputHandler = function(){
 			//"p": (un)pause the game (i.e. stop/restart gravity) 
 			if (e.keyCode==80 && strokeBlock == false) {
 				strokeBlock=true;
+				GameManager.toggleGravity();
+			}
+			
+			//("space") drop down of current tetracube
+			if (e.keyCode==32 && strokeBlock == false) {
+				strokeBlock=true;
+				GameManager.drop();
 			}
 			
 			//("g") that toggles between displaying the underlying 3D grid as a wireframe or not showing this grid
 			if (e.keyCode==71 && strokeBlock == false) {
 				strokeBlock=true;
+				toggleGrid();
 			}
 			
 			//"j": the viewpoint should rotate counterclockwise about the Y-axis around the center of the grid.
@@ -116,6 +123,7 @@ InputHandler = function(){
 			}
 		}
 	}
+	
 
 	// if a key is pressed, the value of the array currentlyPressedKeys in index keyCode is set to true
 	function handleKeyDown(event) {
@@ -131,6 +139,6 @@ InputHandler = function(){
 	return{
 		handleInput: handleInput,
 		handleKeyDown: handleKeyDown,
-		handleKeyUp: handleKeyUp
+		handleKeyUp: handleKeyUp,
 	}
 }();

@@ -106,7 +106,6 @@ Grid = function() {
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 		vertexPositionBuffer.itemSize = 3;
 		vertexPositionBuffer.numItems = vertices.length/3;
-		console.log(vertices.length/3)
 		return vertexPositionBuffer;
 	}
 	

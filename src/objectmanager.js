@@ -34,7 +34,6 @@ ObjectManager = function(){
 	function initTetracube(x){
 		
 		var mvMatrices = [];
-		var rotationMatrices = [];
 		
 		var blocks = x.getBlocks();
 		
@@ -50,9 +49,9 @@ ObjectManager = function(){
 			mvMatrices.push(mvMatrix);
 			
 		}
-		var x = new Tetracube(index, createTexcoordsBuffer(texcoords), mvMatrices, blocks, x.getVectorToRotationOrigin(), 0, 3,0,3);
+		var x = new Tetracube(index, createTexcoordsBuffer(texcoords), mvMatrices, x.getVectorToRotationOrigin());
 		tetracubes.push(x);
-		//GameManager.setCurrent(x);
+		GameManager.setCurrent(x);
 		index++;
 	}
 	
