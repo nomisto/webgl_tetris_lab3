@@ -37,7 +37,7 @@ GameManager = function(){
 	//spawns a random tetracube and starts the gravity
 	function spawnTetracube(){
 		var i = Math.floor((Math.random() * 8) + 1);
-		ObjectManager.addTetracube(1);
+		ObjectManager.addTetracube(i);
 		AnimationHandler.resetAxis();
 		toggleGravity();
 	}

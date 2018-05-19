@@ -6,6 +6,9 @@ Grid = function() {
 	var horizontalVertexTexcoordsBuffer;
 	var verticalVertexTexcoordsBuffer;
 	
+	var horizontalVertexNormalsBuffer;
+	var verticalVertexNormalsBuffer;
+	
 	var topMMatrix;
 	var bottomMMatrix;
 	var leftMMatrix;
@@ -43,6 +46,10 @@ Grid = function() {
 		
 		setupHorizontalVertexTexcoordsBuffer();
 		setupVerticalVertexTexcoordsBuffer();
+		
+		horizontalVertexNormalsBuffer = setupHorizontalVertexNormalsBuffer();
+		verticalVertexNormalsBuffer = setupVerticalVertexNormalsBuffer();
+		
 	}
 	
 	//bx ... numbers of grid fields on the x axis
@@ -100,6 +107,22 @@ Grid = function() {
 		verticalVertexTexcoordsBuffer = createVertexTexcoordsBuffer(res);
 	}
 	
+	function setupHorizontalVertexNormalsBuffer(){
+		res = [];
+		for(i=0;i<24;i++){
+				res = res.concat([0,0,0]);
+		}
+		return createVertexNormalsBuffer(res);
+	}
+	
+	function setupVerticalVertexNormalsBuffer(){
+		res = [];
+		for(i=0;i<34;i++){
+				res = res.concat([0,0,0]);
+		}
+		return createVertexNormalsBuffer(res);
+	}
+	
 	function createVertexPositionBuffer(vertices){
 		var vertexPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
@@ -116,6 +139,13 @@ Grid = function() {
 		return vertexTexcoordsBuffer;
 	}
 	
+	function createVertexNormalsBuffer(normals){
+		var vertexNormalsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexNormalsBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+		return vertexNormalsBuffer;
+	}
+	
 	function getVertexPositionBuffer(i){
 		if(i==='horiz'){return horizontalVertexPositionBuffer;}
 		else {return verticalVertexPositionBuffer;}
@@ -124,6 +154,11 @@ Grid = function() {
 	function getVertexTexcoordsBuffer(i){
 		if(i==='horiz'){return horizontalVertexTexcoordsBuffer;}
 		else {return verticalVertexTexcoordsBuffer;}
+	}
+	
+	function getVertexNormalsBuffer(i){
+		if(i==='horiz'){return horizontalVertexNormalsBuffer;}
+		else {return verticalVertexNormalsBuffer;}
 	}
 	
 	function getMMatrices(i){
@@ -140,6 +175,7 @@ Grid = function() {
 	return {
 		getVertexPositionBuffer: getVertexPositionBuffer,
 		getVertexTexcoordsBuffer: getVertexTexcoordsBuffer,
+		getVertexNormalsBuffer: getVertexNormalsBuffer,
 		getMMatrices: getMMatrices,
 		setup: setup
 	};

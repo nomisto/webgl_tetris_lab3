@@ -55,10 +55,17 @@ function initShaders(vertexShaderId, fragmentShaderId) {
 
 	shaderProgram.vertexTextureAttribute = gl.getAttribLocation(shaderProgram, "aTexCoords");
 	gl.enableVertexAttribArray(shaderProgram.vertexTextureAttribute);
-
+	
+	shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+	gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+	
 	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
 	shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
 	shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uVMatrix");
+	shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNormalMatrix");
+	shaderProgram.kaUniform = gl.getUniformLocation(shaderProgram, "Ka");
+	shaderProgram.kdUniform = gl.getUniformLocation(shaderProgram, "Kd");
+	shaderProgram.ksUniform = gl.getUniformLocation(shaderProgram, "Ks");
 }
 
 // sets the uniform uPMatrix of the vertexshader to the projection matrix
@@ -76,6 +83,22 @@ function setVMatrixUniform(vMatrix) {
 	gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
 }
 
+function setNormalMatrixUniform(normalMatrix){
+	gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
+}
+
+function setkaUniform(ka){
+	gl.uniform1f(shaderProgram.kaUniform, ka);
+}
+
+function setkdUniform(kd){
+	gl.uniform1f(shaderProgram.kdUniform, kd);
+}
+
+function setksUniform(ks){
+	gl.uniform1f(shaderProgram.ksUniform, ks);
+}
+
 
 var fullGrid = false;
 function toggleGrid(){
@@ -86,9 +109,36 @@ function toggleGrid(){
 	}
 }
 
+var gouraudnow = true;
+var gouraud = true;
+function toggleShading(){
+	if(gouraud){
+		gouraud = false;
+	} else {
+		gouraud = true;
+	}
+}
+
 //Draws the Arrays and hands over the belonging mvMatrix of all tetrominos/objects stored in the ObjectManager
 //Also creates the perspective Matrix and sets it to the uniform.
 function drawScene() {
+	if(gouraud == false && gouraudnow == true){
+		//phong
+		initShaders("vertexshaderphong","fragmentshaderphong");
+		gouraudnow = false;
+		setkaUniform(document.getElementById("ambient").value);
+		setkdUniform(document.getElementById("diffuse").value);
+		setksUniform(document.getElementById("specular").value);
+		document.getElementById("shading").innerHTML = "Phong";
+	} else if (gouraud == true && gouraudnow == false){
+		//gouraud
+		initShaders("vertexshadergouraud","fragmentshadergouraud");
+		gouraudnow = true;
+		setkaUniform(document.getElementById("ambient").value);
+		setkdUniform(document.getElementById("diffuse").value);
+		setksUniform(document.getElementById("specular").value);
+		document.getElementById("shading").innerHTML = "Gouraud";
+	}
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
@@ -123,11 +173,20 @@ function drawScene() {
 		}
 	}
 	
+	
 	gl.bindTexture(gl.TEXTURE_2D, Texture.getTexture());
 	ObjectManager.getAllTetracubes().forEach(function(o) {
 		for (i=0; i<o.blocklength; i++){
 			if(o.mvMatrixArray[i]!=null){
+				
 				setMMatrixUniform(o.mvMatrixArray[i]);
+				
+				var normalMatrix = mat3.create();
+				mat3.normalFromMat4(normalMatrix,o.mvMatrixArray[i]);
+				setNormalMatrixUniform(normalMatrix);
+				
+				gl.bindBuffer(gl.ARRAY_BUFFER, Block.getNormalBuffer());
+				gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 				gl.bindBuffer(gl.ARRAY_BUFFER, Block.getPositionBuffer());
 				gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 				gl.bindBuffer(gl.ARRAY_BUFFER, o.texcoordsBuffer);
@@ -141,6 +200,13 @@ function drawScene() {
 
 function drawGrid(i,itmsize,orientation){
 	setMMatrixUniform(Grid.getMMatrices(i));	
+	
+	var normalMatrix = mat3.create();
+	mat3.normalFromMat4(normalMatrix,Grid.getMMatrices(i));
+	setNormalMatrixUniform(normalMatrix);
+				
+	gl.bindBuffer(gl.ARRAY_BUFFER, Grid.getVertexNormalsBuffer(orientation));
+	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 	gl.bindBuffer(gl.ARRAY_BUFFER, Grid.getVertexPositionBuffer(orientation));
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 	gl.bindBuffer(gl.ARRAY_BUFFER, Grid.getVertexTexcoordsBuffer(orientation));
@@ -177,11 +243,15 @@ function webGLStart() {
 	Projection.toggle();
 	
 	// Initialize shaders, load textures and add the wanted tetrominos.
-    initShaders("vertexshader","fragmentshader");
+    initShaders("vertexshadergouraud","fragmentshadergouraud");
 
     // set clearColor to black (r,g,b,a) and enable depth test.
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
+	
+	setkaUniform(document.getElementById("ambient").value);
+	setkdUniform(document.getElementById("diffuse").value);
+	setksUniform(document.getElementById("specular").value);
 	
 	Texture.load();
 	Grid.setup();

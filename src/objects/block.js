@@ -1,7 +1,7 @@
 Block = function() {
 	
 	var vertexPositionBuffer;
-	var vertexColorBuffer;
+	var vertexNormalBuffer;
 	var vertexIndexBuffer;
 	
 	function setup(){
@@ -48,6 +48,44 @@ Block = function() {
 			20, 21, 22,   20, 22, 23  // Left face
 		];
 		
+		var vertexNormals = [
+			// vorne
+			 0.0,  0.0,  1.0,
+			 0.0,  0.0,  1.0,
+			 0.0,  0.0,  1.0,
+			 0.0,  0.0,  1.0,
+			
+			// hinten
+			 0.0,  0.0, -1.0,
+			 0.0,  0.0, -1.0,
+			 0.0,  0.0, -1.0,
+			 0.0,  0.0, -1.0,
+			
+			// oben
+			 0.0,  1.0,  0.0,
+			 0.0,  1.0,  0.0,
+			 0.0,  1.0,  0.0,
+			 0.0,  1.0,  0.0,
+			
+			// unten
+			 0.0, -1.0,  0.0,
+			 0.0, -1.0,  0.0,
+			 0.0, -1.0,  0.0,
+			 0.0, -1.0,  0.0,
+			
+			// rechts
+			 1.0,  0.0,  0.0,
+			 1.0,  0.0,  0.0,
+			 1.0,  0.0,  0.0,
+			 1.0,  0.0,  0.0,
+			
+			// links
+			-1.0,  0.0,  0.0,
+			-1.0,  0.0,  0.0,
+			-1.0,  0.0,  0.0,
+			-1.0,  0.0,  0.0
+		];
+		
 		vertexPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
@@ -59,6 +97,12 @@ Block = function() {
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 		vertexIndexBuffer.itemSize = 1;
 		vertexIndexBuffer.numItems = cubeVertexIndices.length;
+		
+		vertexNormalBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexNormalBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
+		vertexNormalBuffer.itemSize = 3;
+		vertexNormalBuffer.numItems = 24;
 	}
 	
 	function getPositionBuffer(){
@@ -69,9 +113,14 @@ Block = function() {
 		return vertexIndexBuffer;
 	}
 	
+	function getNormalBuffer(){
+		return vertexNormalBuffer;
+	}
+	
 	return {
 		setup:setup,
 		getPositionBuffer:getPositionBuffer,
+		getNormalBuffer: getNormalBuffer,
 		getIndexBuffer:getIndexBuffer
 	}
 }();

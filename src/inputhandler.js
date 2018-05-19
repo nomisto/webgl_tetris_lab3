@@ -115,6 +115,7 @@ InputHandler = function(){
 			//("f") that toggles between Gouraud and Per-Pixel-shading
 			if (e.keyCode==70 && strokeBlock == false) {
 				strokeBlock=true;
+				toggleShading();
 			}
 			
 			//"b" that toggles between blocks and cylinder
