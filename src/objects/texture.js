@@ -74,16 +74,16 @@ Texture = function() {
 		var coords = [];
 		coords = coords.concat([(128*texturetypex + 64) / 640, (128*texturetypey + 64) / 256]); //middle of circle
 		for(var i = 0; i<360; i+=10){
-			coords = coords.concat([(128*texturetypex + 64 + 59*getX(i)) / 640 , (128*texturetypey + 64 + 59*getZ(i)) / 256]);
+			coords = coords.concat([(128*texturetypex + 64 + 58*getX(i)) / 640 , (128*texturetypey + 64 + 58*getZ(i)) / 256]);
 		}
 		
 		coords = coords.concat(coords);
 		
 		for(var i = 0; i<360; i+=10){
-			coords = coords.concat([(128* texturetypex + 64 + 59*getX(i)) / 640,(128*texturetypey+5) / 256]);
+			coords = coords.concat([(128* texturetypex + 64 + 58*getX(i)) / 640,(128*texturetypey) / 256]);
 		}
 		for(var i = 0; i<360; i+=10){
-			coords = coords.concat([(128* texturetypex + 64 + 59*getX(i)) / 640,(128*texturetypey+128-5) / 256]);
+			coords = coords.concat([(128* texturetypex + 64 + 58*getX(i)) / 640,(128*texturetypey+128) / 256]);
 		}
 		return coords;
 	}
