@@ -124,6 +124,16 @@ function toggleShading(){
 	}
 }
 
+// toggles cylinder/blocks
+var cylinder = false;
+function toggleCylinder(){
+	if(cylinder){
+		cylinder = false;
+	} else {
+		cylinder = true;
+	}
+}
+
 //Draws the Scene with the correct shaders
 function drawScene() {
 	if(gouraud == false && gouraudnow == true){
@@ -143,14 +153,17 @@ function drawScene() {
 		setksUniform(document.getElementById("specular").value);
 		document.getElementById("shading").innerHTML = "Gouraud";
 	}
+	
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
+	//set Projection and View Matrices to shader
     setPMatrixUniform(Projection.getMatrix());
 	setVMatrixUniform(View.getMatrix());
 	
 	gl.bindTexture(gl.TEXTURE_2D, Texture.getWhiteTexture());
 	
+	// draw Grid
 	if(fullGrid == true){
 		drawGrid(1,24,'horiz');
 		drawGrid(0,24,'horiz');
@@ -178,7 +191,7 @@ function drawScene() {
 		}
 	}
 	
-	
+	// switch texture, draw all tetracubes
 	gl.bindTexture(gl.TEXTURE_2D, Texture.getTexture());
 	ObjectManager.getAllTetracubes().forEach(function(o) {
 		for (i=0; i<o.blocklength; i++){
@@ -190,14 +203,25 @@ function drawScene() {
 				mat3.normalFromMat4(normalMatrix,o.mvMatrixArray[i]);
 				setNormalMatrixUniform(normalMatrix);
 				
-				gl.bindBuffer(gl.ARRAY_BUFFER, Block.getNormalBuffer());
-				gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
-				gl.bindBuffer(gl.ARRAY_BUFFER, Block.getPositionBuffer());
-				gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-				gl.bindBuffer(gl.ARRAY_BUFFER, o.texcoordsBuffer);
-				gl.vertexAttribPointer(shaderProgram.vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
-				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Block.getIndexBuffer());
-				gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+				if(cylinder){
+					gl.bindBuffer(gl.ARRAY_BUFFER, Cylinder.getNormalBuffer());
+					gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+					gl.bindBuffer(gl.ARRAY_BUFFER, Cylinder.getPositionBuffer());
+					gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+					gl.bindBuffer(gl.ARRAY_BUFFER, o.cylinderTexcoordsBuffer);
+					gl.vertexAttribPointer(shaderProgram.vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
+					gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Cylinder.getIndexBuffer());
+					gl.drawElements(gl.TRIANGLES, 432, gl.UNSIGNED_SHORT, 0);
+				} else {
+					gl.bindBuffer(gl.ARRAY_BUFFER, Block.getNormalBuffer());
+					gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+					gl.bindBuffer(gl.ARRAY_BUFFER, Block.getPositionBuffer());
+					gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+					gl.bindBuffer(gl.ARRAY_BUFFER, o.cubeTexcoordsBuffer);
+					gl.vertexAttribPointer(shaderProgram.vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
+					gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Block.getIndexBuffer());
+					gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+				}
 			}
 		}
 	});
@@ -264,6 +288,7 @@ function webGLStart() {
 	Texture.load();
 	Grid.setup();
 	Block.setup();
+	Cylinder.setup();
 	GameManager.initializeNewGame();
     renderLoop();
 }

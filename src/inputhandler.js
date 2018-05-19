@@ -121,6 +121,7 @@ InputHandler = function(){
 			//"b" that toggles between blocks and cylinder
 			if (e.keyCode==66 && strokeBlock == false) {
 				strokeBlock=true;
+				toggleCylinder();
 			}
 		}
 	}

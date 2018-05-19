@@ -1,8 +1,9 @@
 class Tetracube{
 	
-	constructor(index, texcoordsBuffer, mvMatrixArray, vectorToRotationOriginArray) {
+	constructor(index, cubeTexcoordsBuffer, cylinderTexcoordsBuffer, mvMatrixArray, vectorToRotationOriginArray) {
 		this.index=index;
-		this.texcoordsBuffer=texcoordsBuffer;
+		this.cubeTexcoordsBuffer=cubeTexcoordsBuffer;
+		this.cylinderTexcoordsBuffer=cylinderTexcoordsBuffer;
 		this.mvMatrixArray = mvMatrixArray;
 		this.vectorToRotationOriginArray = vectorToRotationOriginArray;
 		this.blocklength=4;

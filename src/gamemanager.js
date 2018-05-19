@@ -231,10 +231,6 @@ GameManager = function(){
 	//updates the occupied blocks array
 	function updateOccupiedBlocks(){
 		forEachBlockOfCurrent(function(x,y,z){
-			
-		console.log("x: " + x);
-		console.log("y: " + y);
-		console.log("z: " + z);
 			occupiedBlocks[x][y][z] = current.index * 10 + i;
 		});
 	}

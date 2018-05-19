@@ -34,8 +34,8 @@ Texture = function() {
 		return whiteTexture;
 	};
 		
-	//calculates the texcoords and returns it as a array
-	function getTextureCoords(texturetypex, texturetypey){
+	//calculates the texcoords for the cube and returns it as a array
+	function getCubeTextureCoords(texturetypex, texturetypey){
 		return [
 			(128*texturetypex + 128) / 640, (128*texturetypey + 128) / 256, //Rechtsunten
 			(128*texturetypex) / 640, (128*texturetypey + 128) / 256, //Rechtsoben
@@ -69,10 +69,40 @@ Texture = function() {
 		]
 	}
 	
+	//calculates the texcoords for the cylinder and returns it as a array
+	function getCylinderTextureCoords(texturetypex,texturetypey){
+		var coords = [];
+		coords = coords.concat([(128*texturetypex + 64) / 640, (128*texturetypey + 64) / 256]); //middle of circle
+		for(var i = 0; i<360; i+=10){
+			coords = coords.concat([(128*texturetypex + 64 + 59*getX(i)) / 640 , (128*texturetypey + 64 + 59*getZ(i)) / 256]);
+		}
+		
+		coords = coords.concat(coords);
+		
+		for(var i = 0; i<360; i+=10){
+			coords = coords.concat([(128* texturetypex + 64 + 59*getX(i)) / 640,(128*texturetypey+5) / 256]);
+		}
+		for(var i = 0; i<360; i+=10){
+			coords = coords.concat([(128* texturetypex + 64 + 59*getX(i)) / 640,(128*texturetypey+128-5) / 256]);
+		}
+		return coords;
+	}
+	
+	// returns the x value of a circle with radius 1
+	function getX(angle){
+		return Math.cos(angle*Math.PI/180);
+	}
+	
+	// returns the z value of a circle with radius 1
+	function getZ(angle){
+		return Math.sin(angle*Math.PI/180);
+	}
+	
 	return{
 		load: load,
 		getTexture: getTexture,
 		getWhiteTexture: getWhiteTexture,
-		getTextureCoords: getTextureCoords
+		getCubeTextureCoords: getCubeTextureCoords,
+		getCylinderTextureCoords: getCylinderTextureCoords
 	}
 }();

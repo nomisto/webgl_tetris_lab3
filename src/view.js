@@ -4,7 +4,7 @@ View = function() {
 	
 	var vMatrix = mat4.create();
 	mat4.identity(vMatrix);
-	rotateX(90);
+	//rotateX(90);
 	
 	// converts degree to rad
 	function deg2rad(deg){

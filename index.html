@@ -10,6 +10,7 @@
 		
 		<script type="text/javascript" src="src/objects/grid.js"></script>
 		<script type="text/javascript" src="src/objects/block.js"></script>
+		<script type="text/javascript" src="src/objects/cylinder.js"></script>
 		<script type="text/javascript" src="src/objects/texture.js"></script>
 		<script type="text/javascript" src="src/objects/tetracube.js"></script>
 		<script type="text/javascript" src="src/objects/shapes.js"></script>
@@ -166,9 +167,8 @@
 	
 	<body onload="webGLStart();">
 		<div>
-			<canvas id="lab01-canvas" width="350" height="700"></canvas>
-		</div>
-		<div id="slidecontainer">
+			<canvas style="float: left;margin-right: 10px;" id="lab01-canvas" width="350" height="700"></canvas>
+		
 			<p> Shading: <span id = "shading">Gouraud</span></p>
 			<p>
 				Ambient
@@ -184,6 +184,11 @@
 				Specular
 				<input type="range" min="0.0" max="1.0" step="0.1" value="0.5" id="specular">
 				<span id = "specval"></span>
+			</p>
+			<p>
+				
+
+
 			</p>
 		</div>
 		

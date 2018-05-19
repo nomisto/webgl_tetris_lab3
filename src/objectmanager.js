@@ -41,7 +41,8 @@ ObjectManager = function(){
 		
 		var texturetypex = Math.floor((Math.random() * 5));
 		var texturetypey = Math.floor((Math.random() * 2));
-		var texcoords = Texture.getTextureCoords(texturetypex, texturetypey);
+		var cubetexcoords = Texture.getCubeTextureCoords(texturetypex, texturetypey);
+		var cylindertexcoords = Texture.getCylinderTextureCoords(texturetypex, texturetypey);
 		
 		for(i = 0; i<4; i++){
 			var mvMatrix = mat4.create();
@@ -51,7 +52,7 @@ ObjectManager = function(){
 			mvMatrices.push(mvMatrix);
 			
 		}
-		var x = new Tetracube(index, createTexcoordsBuffer(texcoords), mvMatrices, x.getVectorToRotationOrigin());
+		var x = new Tetracube(index, createTexcoordsBuffer(cubetexcoords),createTexcoordsBuffer(cylindertexcoords), mvMatrices, x.getVectorToRotationOrigin());
 		tetracubes.push(x);
 		GameManager.setCurrent(x);
 		index++;
