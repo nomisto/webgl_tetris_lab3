@@ -30,29 +30,4 @@ class Tetracube{
 	get blocklength(){
 		return this._blocklength;
 	}
-	
-	set currX(input){
-		this._currX=input;
-	}
-	
-	get currX(){
-		return this._currX;
-	}
-	
-	set currY(input){
-		this._currY=input;
-	}
-	
-	get currY(){
-		return this._currY;
-	}
-	
-	get blocks(){
-		return this._blocks;
-	}
-	
-	set blocks(value){
-		this._blocks=value;
-	}
-	
 };

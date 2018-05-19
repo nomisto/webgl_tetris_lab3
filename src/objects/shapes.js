@@ -1,4 +1,5 @@
 IShape = function(){
+	// returns an array of block composition of this tetracube
 	function getBlocks(){
 		return [
 			0,0,0,
@@ -8,6 +9,7 @@ IShape = function(){
 		]
 	}
 	
+	// returns the vector to the rotation origin of each block
 	function getVectorToRotationOrigin(){
 		return [
 			-0.5,-1.5,-0.5,
@@ -23,11 +25,11 @@ IShape = function(){
 	}
 }();
 
-
+//further shapes see comments above
 
 
 OShape = function() {
-	//returns an array of the vertices of this shape
+	
 	function getBlocks(){
 		return [
 			0,0,0,
@@ -56,7 +58,7 @@ OShape = function() {
 
 
 LShape = function() {
-	//returns an array of the vertices of this shape
+
 	function getBlocks(){
 		return [
 			0,0,0,
@@ -66,7 +68,7 @@ LShape = function() {
 		];
 	}
 	
-	//returns a vector to the rotation origin of each block
+
 	function getVectorToRotationOrigin(){
 		return [
 			1,-1,0,
@@ -86,8 +88,7 @@ LShape = function() {
 
 
 TShape = function() {
-	
-	//returns an array of the vertices of this shape
+
 	function getBlocks(){
 		return [
 			0,0,0,
@@ -117,7 +118,6 @@ TShape = function() {
 
 SShape = function() {
 	
-	//returns an array of the vertices of this shape
 	function getBlocks(){
 		return [
 			0,-1,0,
@@ -147,7 +147,6 @@ SShape = function() {
 
 towRightShape = function() {
 	
-	//returns an array of the vertices of this shape
 	function getBlocks(){
 		return [
 			1,0,0,
@@ -174,7 +173,6 @@ towRightShape = function() {
 
 towLeftShape = function() {
 	
-	//returns an array of the vertices of this shape
 	function getBlocks(){
 		return [
 			0,0,0,
@@ -201,7 +199,6 @@ towLeftShape = function() {
 
 tripodShape = function() {
 	
-	//returns an array of the vertices of this shape
 	function getBlocks(){
 		return [
 			1,0,0,

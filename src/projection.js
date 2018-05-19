@@ -5,6 +5,7 @@ Projection = function() {
     mat4.identity(pMatrix);
     mat4.ortho(pMatrix, -10.0/zoom, 10.0/zoom, -20.0/zoom, 20.0/zoom, 0.1, 100000);
 
+	// toggles the projection type Ortho/perspective with respect to a zoom variable
 	function toggle(){
 		if(proj==1){
 			mat4.identity(pMatrix);
@@ -17,6 +18,7 @@ Projection = function() {
 		}
 	}
 	
+	//increases the zoom
 	function increaseZoom(){
 		zoom = zoom + 0.01;
 		console.log(zoom);
@@ -24,6 +26,7 @@ Projection = function() {
 		toggle();
 	}
 	
+	//decreases the zoom 
 	function decreaseZoom(){
 		if(zoom>0.51) zoom = zoom - 0.01;
 		console.log(zoom);
@@ -31,6 +34,7 @@ Projection = function() {
 		toggle();
 	}
 	
+	// returns the projection matrix
 	function getMatrix(){
 		return pMatrix;
 	}

@@ -20,8 +20,7 @@ AnimationHandler = function(){
 	}
 	
 	/* deletes the first item of the animationsStack and the animationsProgress.
-	   If the finished animation was a counterclockwise rotation, the orientation of the tetromino-object decrements by one.
-	   If the finished animation was a clockwise rotation, the orientation of the tetromino-object increments by one.
+	   calculates the new axis if a rotation was performed
 	   If the animation stack size is zero, it gravitates one time.
 	   */
 	function shift() {
@@ -83,6 +82,7 @@ AnimationHandler = function(){
 	function animate() {
 		deltaTime = getDeltaTime();
 		
+		//if the animationprogress is zero (new animation) check if the wanted animation is possible (boundary check)
 		if(animationsProgress[0] == 0){
 			if(!GameManager.isNextFree(animationsStack[0])){
 				shift();
@@ -142,7 +142,7 @@ AnimationHandler = function(){
 		return angle;
 	}
 	
-	// returns the value of one horizontal/vertical-movement animationstep using the deltatime
+	// returns the value of one wasd or gravity movement animationstep using the deltatime
 	function getValue(){
 		var value = deltaTime/gravitationSpeed;
 		if ((value+animationsProgress[0]) < 2) {
@@ -155,11 +155,12 @@ AnimationHandler = function(){
 		return value;
 	}
 	
+	// sets the gravitation speed
 	function setGravitationSpeed(speed){
 		gravitationSpeed=speed;
 	}
 	
-	// determines the orientation of the object and translates it by the given value in relation to the display X-axis
+	// moves the object in the x axis
 	function moveX(value){
 		for(i=0; i<current.blocklength; i++){
 			var trans = mat4.create();
@@ -169,7 +170,7 @@ AnimationHandler = function(){
 		}
 	}
 	
-	// determines the orientation of the object and translates it by the given value in relation to the display Y-axis
+	// maves a object in the y axis
 	function moveY(value){
 		for(i=0; i<current.blocklength; i++){
 			var trans = mat4.create();
@@ -179,7 +180,7 @@ AnimationHandler = function(){
 		}
 	}
 	
-	
+	// moves a object in the z axis
 	function moveZ(value){
 		for(i=0; i<current.blocklength; i++){
 			var trans = mat4.create();
@@ -195,7 +196,7 @@ AnimationHandler = function(){
 	}
 	
 	
-	// calculates the rotation-matrix of the mvMatrix by the given angle around the z-axis
+	// performs a rotation of the mvMatrix by the given angle around the world x-axis
 	function rotateX(angle) {
 		for(i=0; i<current.blocklength; i++){
 			mat4.translate(current.mvMatrixArray[i], current.mvMatrixArray[i], [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
@@ -204,6 +205,7 @@ AnimationHandler = function(){
 		}
 	}
 	
+	// performs a rotation of the mvMatrix by the given angle around the world y-axis
 	function rotateY(angle) {
 		for(i=0; i<current.blocklength; i++){
 			mat4.translate(current.mvMatrixArray[i], current.mvMatrixArray[i], [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
@@ -212,6 +214,7 @@ AnimationHandler = function(){
 		}
 	}
 	
+	// performs a rotation of the mvMatrix by the given angle around the world z-axis
 	function rotateZ(angle) {
 		for(i=0; i<current.blocklength; i++){
 			mat4.translate(current.mvMatrixArray[i], current.mvMatrixArray[i], [current.vectorToRotationOriginArray[3*i]*2, current.vectorToRotationOriginArray[3*i+1]*2, current.vectorToRotationOriginArray[3*i+2]*2]);
@@ -220,6 +223,8 @@ AnimationHandler = function(){
 		}
 	}
 	
+	// returns a copy of the mvMatrix with a full rotation in a direction set by the var rotation
+	// needed for the boundary checks of a rotation. (Doesnt rotate the actual object, only returns a matrix to check what would it look like)
 	function getFullRotation(i,rotation){
 		var foo = mat4.create;
 		mat4.copy(foo,current.mvMatrixArray[i]);
@@ -259,14 +264,13 @@ AnimationHandler = function(){
 		return foo;
 	}
 	
+	// resets the axis to euler
+	// needed when a new tetracube is spawned
 	function resetAxis(){
 		xAxis = vec3.fromValues(1,0,0);
 		yAxis = vec3.fromValues(0,1,0);
 		zAxis = vec3.fromValues(0,0,1);
 	}
-			
-	
-	
 	
 	
 	return{

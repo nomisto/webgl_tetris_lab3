@@ -5,11 +5,11 @@ GameManager = function(){
 	
 	var gravitationspeed = 600;
 	
-	//tetromino in focus of the gamemanager
+	//tetracube in focus of the gamemanager
 	var current;
 	
 	
-
+	// Initializes new game. Sets every variable to default. Deletes all Tetracubes (if there are any) and spawns a new one.
 	function initializeNewGame(){
 		
 		for(var i=0; i<5; i++){
@@ -34,7 +34,7 @@ GameManager = function(){
 		initializeNewGame();
 	}
 	
-	//spawns a random tetracube and starts the gravity
+	//spawns a random tetracube, resets the rotationaxis and starts the gravity
 	function spawnTetracube(){
 		var i = Math.floor((Math.random() * 8) + 1);
 		ObjectManager.addTetracube(i);
@@ -42,8 +42,8 @@ GameManager = function(){
 		toggleGravity();
 	}
 	
-	//helper function which applies one function to every block of current
-	//orientationAfterRotation is optional (only needed for boundary checks before a rotation)
+	//helper function which applies one function to every block
+	// x,y,z are the coords of the array occupiedblocks
 	function forEachBlockOfCurrent(func){
 		if(current!=null){
 			for(i = 0; i < current.blocklength; i++){
@@ -57,8 +57,8 @@ GameManager = function(){
 	}
 	
 	
-	//returns true if the blocks aren't occupied in the specified direction (movX,movY)
-	//f.e. movX = 1, movY = 0 means one movement to the right
+	//returns true if the blocks aren't occupied in the specified direction (movX,movY,movZ)
+	//f.e. movX = 1, movY = 0 movZ = 0 means one movement to positive x axis
 	function occupied(movX,movY,movZ,rotation){
 		var result = false;
 		for(var i = 0; i < current.blocklength; i++){
@@ -73,7 +73,8 @@ GameManager = function(){
 		return result;
 	}
 	
-	
+	// converts the world coords of a block i to the array coords with respect to a rotation (optional)
+	// for the possible values of rotation see animationhandler.addAnimation (5-10)
 	function getArrayCoordsOfCurrentBlock(i,rotation){
 		var test = vec4.fromValues(0,0,0,1);
 		var mm = mat4.create();
@@ -91,6 +92,8 @@ GameManager = function(){
 		return test;
 	}
 	
+	// returns if one movement is possible or if its occupied
+	// again for the possible values of i see animationhandler.addAnimation
 	function isNextFree(i){
 		switch(i){
 			case 1: return !occupied(1,0,0);
@@ -109,10 +112,9 @@ GameManager = function(){
 	
 	
 	/*Evolved as the core of the game, there are 3 options:
-	  1. If space beneath a tetromino isnt occupied, the "down"-Animation is added to the Animationhandler and currY is incremented.
-	  2. else if the space where the tetromino is now isn't occupied (needed because a tetromino spawnes everytime at a certain place and if this place is already occupied the game ends) 
-	     occupiedblocks are updated and a check for a full line runs. Then a new tetromino is spawned.
-	  3. the game ends, ObjectManager deletes the last tetromino for visual purposes
+	  1. if one movement down is possible add gravitation animation
+	  2. if the the block itself isnt occupied spawn a new tetracube and check for possible full plane
+	  3. if the tetracube itself is occupied -> game is over; delete the last one for visual purposes
 	*/
 	function gravitate() {
 		if(gravity){
@@ -131,9 +133,9 @@ GameManager = function(){
 		}
 	}
 	
-	/*checks for full lines
-	  if full lines are found, everyone is deleted one by one
-	  first the row will be deleted and tetrominos altered (deleteFullLine and falldownAlteredTetros)
+	/*checks for full plane
+	  if full planes are found, every plane is deleted one by one
+	  first the plane cubes will be deleted and tetracubes are altered (deleteFullLine and falldownAlteredTetras)
 	  then all the other non-altered tetrominos will fall down as long as they can (falldownAll).*/
 	function checkFullPlane(){
 		var fullY = [];
@@ -162,7 +164,7 @@ GameManager = function(){
 	}
 	
 	
-	// deletes one line and updates the score
+	// deletes all the cubes of the plane
 	function deleteFullPlane(o){
 		
 		var changedTetras = [];
@@ -202,7 +204,7 @@ GameManager = function(){
 		});
 	}
 	
-	// Lets all tetrominos fall down as long as they dont collide with another tetromino
+	// Lets all tetracubes fall down as long as they dont collide with another tetromino
 	function falldownAll() {
 		var fallen = 0;
 		ObjectManager.getAllTetracubes().forEach(function(tetra){
@@ -237,7 +239,7 @@ GameManager = function(){
 		});
 	}
 	
-	//Starts the gravity, if gravity is already true triple the falldown speed
+	//toggles the gravity
 	function toggleGravity(){
 		if(!gravity){
 			AnimationHandler.setGravitationSpeed(gravitationspeed);
@@ -248,6 +250,7 @@ GameManager = function(){
 		}
 	}
 	
+	//drops one tetracube (if space is pressed), gravitationspeed is times 8
 	function drop(){
 		AnimationHandler.setGravitationSpeed(gravitationspeed/8);
 		if(!gravity){
@@ -261,12 +264,12 @@ GameManager = function(){
 		return occupiedBlocks[x][y][z];
 	}
 	
-	// sets the current tetromino of the gamemanager
+	// sets the current tetracube of the gamemanager
 	function setCurrent(tetra){
 		current = tetra;
 	}
 	
-	// returns the current tetromino
+	// returns the current tetracube
 	function getCurrent(){
 		return current;
 	}

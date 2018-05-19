@@ -16,6 +16,7 @@ Grid = function() {
 	var frontMMatrix;
 	var backMMatrix;
 	
+	// sets up the buffers and mMatrices of the grid pieces.
 	function setup() {
 		topMMatrix = mat4.create();
 		mat4.identity(topMMatrix);
@@ -52,6 +53,7 @@ Grid = function() {
 		
 	}
 	
+	// returns a vertex position buffer for a grid with following dimensions
 	//bx ... numbers of grid fields on the x axis
 	//hz ... numbers of grid fields on the z axis
 	function setupVertexPositionBuffer(bx,hz){
@@ -91,6 +93,8 @@ Grid = function() {
 		return createVertexPositionBuffer(res);
 	}
 	
+	
+	// sets up the texcoords buffer of the grid (needed to use color and textures at the same time see main:152)
 	function setupHorizontalVertexTexcoordsBuffer(){
 		res = [];
 		for(i=0;i<24;i++){
@@ -107,6 +111,7 @@ Grid = function() {
 		verticalVertexTexcoordsBuffer = createVertexTexcoordsBuffer(res);
 	}
 	
+	// sets up the normal buffers for the grid vertices, all set to 0,0,0
 	function setupHorizontalVertexNormalsBuffer(){
 		res = [];
 		for(i=0;i<24;i++){
@@ -122,6 +127,9 @@ Grid = function() {
 		}
 		return createVertexNormalsBuffer(res);
 	}
+	
+	
+	// Functions to create the 3 different buffers and to get them or the mMatrices
 	
 	function createVertexPositionBuffer(vertices){
 		var vertexPositionBuffer = gl.createBuffer();

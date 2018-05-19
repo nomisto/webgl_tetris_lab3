@@ -4,8 +4,9 @@ Block = function() {
 	var vertexNormalBuffer;
 	var vertexIndexBuffer;
 	
+	// sets up the buffers for the vertices, indices, and normals of a cube.
 	function setup(){
-		//returns the vertice positions as a vector
+		
 		var vertices = [
 				// Front face
 				-1.0, -1.0,  1.0,
@@ -49,37 +50,37 @@ Block = function() {
 		];
 		
 		var vertexNormals = [
-			// vorne
+			// front
 			 0.0,  0.0,  1.0,
 			 0.0,  0.0,  1.0,
 			 0.0,  0.0,  1.0,
 			 0.0,  0.0,  1.0,
 			
-			// hinten
+			// back
 			 0.0,  0.0, -1.0,
 			 0.0,  0.0, -1.0,
 			 0.0,  0.0, -1.0,
 			 0.0,  0.0, -1.0,
 			
-			// oben
+			// top
 			 0.0,  1.0,  0.0,
 			 0.0,  1.0,  0.0,
 			 0.0,  1.0,  0.0,
 			 0.0,  1.0,  0.0,
 			
-			// unten
+			// bottom
 			 0.0, -1.0,  0.0,
 			 0.0, -1.0,  0.0,
 			 0.0, -1.0,  0.0,
 			 0.0, -1.0,  0.0,
 			
-			// rechts
+			// right
 			 1.0,  0.0,  0.0,
 			 1.0,  0.0,  0.0,
 			 1.0,  0.0,  0.0,
 			 1.0,  0.0,  0.0,
 			
-			// links
+			// left
 			-1.0,  0.0,  0.0,
 			-1.0,  0.0,  0.0,
 			-1.0,  0.0,  0.0,

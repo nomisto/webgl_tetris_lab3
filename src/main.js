@@ -73,33 +73,37 @@ function setPMatrixUniform(pMatrix) {
 	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
 }
 
-// sets the uniform uMVMatrix of the vertexshader to the model matrix
+// sets the uniform uMMatrix of the vertexshader to the model matrix
 function setMMatrixUniform(mMatrix) {
 	gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
 }
 
-// sets the uniform uMVMatrix of the vertexshader to the view matrix
+// sets the uniform uVMatrix of the vertexshader to the view matrix
 function setVMatrixUniform(vMatrix) {
 	gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
 }
 
+// sets the uniform uNormalMatrix to the normalMatrix
 function setNormalMatrixUniform(normalMatrix){
 	gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
 }
 
+// sets the ambient koefficient
 function setkaUniform(ka){
 	gl.uniform1f(shaderProgram.kaUniform, ka);
 }
 
+//sets the diffuse coefficient
 function setkdUniform(kd){
 	gl.uniform1f(shaderProgram.kdUniform, kd);
 }
 
+// sets the specular coefficient
 function setksUniform(ks){
 	gl.uniform1f(shaderProgram.ksUniform, ks);
 }
 
-
+// toggles if the fullgrid should show or not
 var fullGrid = false;
 function toggleGrid(){
 	if(!fullGrid){
@@ -109,6 +113,7 @@ function toggleGrid(){
 	}
 }
 
+// toggles the shading methods
 var gouraudnow = true;
 var gouraud = true;
 function toggleShading(){
@@ -119,8 +124,7 @@ function toggleShading(){
 	}
 }
 
-//Draws the Arrays and hands over the belonging mvMatrix of all tetrominos/objects stored in the ObjectManager
-//Also creates the perspective Matrix and sets it to the uniform.
+//Draws the Scene with the correct shaders
 function drawScene() {
 	if(gouraud == false && gouraudnow == true){
 		//phong
@@ -144,6 +148,7 @@ function drawScene() {
 	
     setPMatrixUniform(Projection.getMatrix());
 	setVMatrixUniform(View.getMatrix());
+	
 	gl.bindTexture(gl.TEXTURE_2D, Texture.getWhiteTexture());
 	
 	if(fullGrid == true){
@@ -198,6 +203,7 @@ function drawScene() {
 	});
 }
 
+//draws the grid
 function drawGrid(i,itmsize,orientation){
 	setMMatrixUniform(Grid.getMMatrices(i));	
 	
@@ -214,6 +220,7 @@ function drawGrid(i,itmsize,orientation){
 	gl.drawArrays(gl.LINES, 0, itmsize);
 }
 
+// determines the z value of each grid piece and returns it.
 function zTest(i){
 	var test = vec4.fromValues(0,0,0,1);
 	vec4.transformMat4(test,test,Grid.getMMatrices(i));
@@ -240,19 +247,20 @@ function webGLStart() {
     // define input handling functions
     document.onkeydown = InputHandler.handleKeyDown;
     document.onkeyup = InputHandler.handleKeyUp;
-	Projection.toggle();
 	
-	// Initialize shaders, load textures and add the wanted tetrominos.
+	// Initialize shaders
     initShaders("vertexshadergouraud","fragmentshadergouraud");
 
     // set clearColor to black (r,g,b,a) and enable depth test.
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 	
+	// set the uniform of the different coefficient to the ones in the sliders of the ui
 	setkaUniform(document.getElementById("ambient").value);
 	setkdUniform(document.getElementById("diffuse").value);
 	setksUniform(document.getElementById("specular").value);
 	
+	// loads the texture, sets up the buffers of the grid and block, starts a new game
 	Texture.load();
 	Grid.setup();
 	Block.setup();

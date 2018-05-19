@@ -21,7 +21,7 @@
 		<script type="text/javascript" src="src/gamemanager.js"></script>
 		<script type="text/javascript" src="src/animationhandler.js"></script>
 		
-		
+		<!--fragment shader for gouraud shading -->
 		<script id="fragmentshadergouraud" type="x-shader/x-fragment">
 			precision mediump float;
 			varying vec2 vTexCoords;
@@ -40,6 +40,7 @@
 			}
 		</script>
 
+		<!--vertex shader for gouraud shading -->
 		<script id="vertexshadergouraud" type="x-shader/x-vertex">
 			attribute vec3 aVertexPosition;
 			attribute vec2 aTexCoords;
@@ -90,7 +91,7 @@
 		</script>
 		
 		
-		
+		<!--fragment shader for phong shading -->
 		<script id="fragmentshaderphong" type="x-shader/x-fragment">
 			precision mediump float;
 			varying vec2 vTexCoords;
@@ -136,6 +137,7 @@
 			}
 		</script>
 
+		<!--vertex shader for phong shading -->
 		<script id="vertexshaderphong" type="x-shader/x-vertex">
 			attribute vec3 aVertexPosition;
 			attribute vec2 aTexCoords;

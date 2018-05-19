@@ -4,6 +4,7 @@ ObjectManager = function(){
 	
 	var index = 1;
 
+	// switch wich tetracube to init
 	function addTetracube (input) {
 		if(input==1){
 			initTetracube(IShape);
@@ -31,6 +32,7 @@ ObjectManager = function(){
 		}
 	}
 
+	// sets the mvMatrices and texturecoords for each block of a tetracube, and pushes it to the array tetracubes
 	function initTetracube(x){
 		
 		var mvMatrices = [];

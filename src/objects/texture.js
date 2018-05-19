@@ -3,6 +3,7 @@ Texture = function() {
 	var texture;
 	var whiteTexture;
 	
+	// asynchronosly loads the image, creates a texture and binds it
 	function load(){
 		texture = gl.createTexture();
 		gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -23,16 +24,17 @@ Texture = function() {
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, whitePixel);
 	}
 	
-	// asynchronosly loads the image, creates a texture and binds it
+	//returns the texture for the tetracubes
 	function getTexture(){
 		return texture;
 	};
 	
+	// returns the white textrue for the grid
 	function getWhiteTexture(){
 		return whiteTexture;
 	};
 		
-	//calculates the texcoords and returns it as a vector
+	//calculates the texcoords and returns it as a array
 	function getTextureCoords(texturetypex, texturetypey){
 		return [
 			(128*texturetypex + 128) / 640, (128*texturetypey + 128) / 256, //Rechtsunten
@@ -64,10 +66,6 @@ Texture = function() {
 			(128*texturetypex) / 640, (128*texturetypey + 128) / 256, //Rechtsoben
 			(128*texturetypex) / 640, (128*texturetypey) / 256, //LinksOben
 			(128*texturetypex + 128) / 640, (128*texturetypey) / 256, //Linksunten
-			
-			
-			
-			
 		]
 	}
 	
